@@ -29,3 +29,8 @@ if __name__ == '__main__':
     print("\n Training complete!")
     print(f"Best mAP50: {results.results_dict.get('metrics/mAP50(B)', 'N/A')}")
     print("Model saved to: saved_models/license_plate_best.pt")
+
+
+    # This file contains the code to train the YOLOv8 model on the license plate recognition dataset.
+    # It loads the pretrained YOLOv8 small model, fine-tunes it on the dataset for 30 epochs, and saves the best model weights to a local directory. 
+    # The training results, including the best mAP50 score, are printed at the end.
