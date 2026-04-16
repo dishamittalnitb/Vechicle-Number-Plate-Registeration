@@ -273,6 +273,7 @@ torch             # Deep learning backend (install separately with CUDA)
 | [Claude Vision — Anthropic](https://console.anthropic.com) | High-accuracy OCR |
 | [OpenCV](https://opencv.org) | Image processing & visualization |
 | [PyTorch + CUDA](https://pytorch.org) | GPU-accelerated deep learning |
-| [Roboflow](https://roboflow.com) | Dataset management |# Vehicle-Regestration
-#   V e c h i c l e - N u m b e r - P l a t e - R e g i s t e r a t i o n  
- 
+| [Roboflow](https://roboflow.com) | Dataset management
+---
+
+#vehicle_registeration
