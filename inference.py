@@ -32,36 +32,36 @@ if __name__ == '__main__':
         return enhanced
 
         # ── CCI DICTIONARIES [5] ─────────────────────────────────────────
-    # Rules for characters misread as numbers, and numbers misread as letters
-    CHAR_TO_NUM = {'O': '0', 'L': '1', 'I': '1', 'J': '3', 'A': '4', 'S': '5', 'G': '6', 'B': '8'}
-    NUM_TO_CHAR = {'0': 'O', '1': 'L', '3': 'J', '4': 'A', '5': 'S', '6': 'G', '8': 'B'}
-    # ──────────────────────────────────────────────────────────────────
+    # # Rules for characters misread as numbers, and numbers misread as letters
+    # CHAR_TO_NUM = {'O': '0', 'L': '1', 'I': '1', 'J': '3', 'A': '4', 'S': '5', 'G': '6', 'B': '8'}
+    # NUM_TO_CHAR = {'0': 'O', '1': 'L', '3': 'J', '4': 'A', '5': 'S', '6': 'G', '8': 'B'}
+    # # ──────────────────────────────────────────────────────────────────
 
-    def apply_cci(text):
-        """
-        Applies the Check Character Index (CCI) to correct OCR errors based on 
-        the Indian standard format: LL NN LLL NNNN (e.g., MH12ABC1234) [2, 6].
-        """
-        # Standard Indian plate without spaces usually has 9 or 10 characters.
-        # Assuming a 10-character plate for this strict positional mapping:
-        if len(text) == 10:
-            corrected = ""
-            for i, char in enumerate(text):
-                if i in [1, 2, 5, 6]:  # Expected Letter positions
-                    corrected += NUM_TO_CHAR.get(char, char)
-                elif i in [3,4,7,8,9,10]:  # Expected Number positions
-                    corrected += CHAR_TO_NUM.get(char, char)
-                else:
-                    corrected += char
-            return corrected
-        return text
+    # def apply_cci(text):
+    #     """
+    #     Applies the Check Character Index (CCI) to correct OCR errors based on 
+    #     the Indian standard format: LL NN LLL NNNN (e.g., MH12ABC1234) [2, 6].
+    #     """
+    #     # Standard Indian plate without spaces usually has 9 or 10 characters.
+    #     # Assuming a 10-character plate for this strict positional mapping:
+    #     if len(text) == 10:
+    #         corrected = ""
+    #         for i, char in enumerate(text):
+    #             if i in [1, 2, 5, 6]:  # Expected Letter positions
+    #                 corrected += NUM_TO_CHAR.get(char, char)
+    #             elif i in [3,4,7,8,9,10]:  # Expected Number positions
+    #                 corrected += CHAR_TO_NUM.get(char, char)
+    #             else:
+    #                 corrected += char
+    #         return corrected
+    #     return text
 
 
-    def is_valid_plate(text):
-        """Validates the plate using Regex for the Indian Standard [6]."""
-        # Matches LL NN L/LL/LLL NNNN (e.g., MH12AB1234)
-        pattern = r'^[A-Z]{2}\d{2}[A-Z]{1,3}\d{4}$'
-        return bool(re.match(pattern, text))
+    # def is_valid_plate(text):
+    #     """Validates the plate using Regex for the Indian Standard [6]."""
+    #     # Matches LL NN L/LL/LLL NNNN (e.g., MH12AB1234)
+    #     pattern = r'^[A-Z]{2}\d{2}[A-Z]{1,3}\d{4}$'
+    #     return bool(re.match(pattern, text))
 
     def read_plate_text(plate_img):
         processed = preprocess_plate(plate_img)
@@ -69,10 +69,10 @@ if __name__ == '__main__':
         
         if results:
             raw_text = "".join(results).upper().replace(" ", "").replace("-", "")
-            corrected_text = apply_cci(raw_text)
-            if is_valid_plate(corrected_text):
-                return corrected_text
-                
+            # corrected_text = apply_cci(raw_text)
+            # if is_valid_plate(corrected_text):
+            #     return corrected_text
+            return raw_text
         return None
 
     def get_majority_vote(history_deque):

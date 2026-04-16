@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 *.pyo
 
+## virtual - env ./License_Plate_Recognition_env/Scripts/Activate.ps1
+
