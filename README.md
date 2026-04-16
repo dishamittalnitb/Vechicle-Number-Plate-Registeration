@@ -1,4 +1,4 @@
-# 🚗 License Plate Recognition System
+## 🚗 License Plate Recognition System
 > A real-time Automatic Number Plate Recognition (ANPR) system built using **YOLOv8** for detection and **OCR** for text extraction — capable of processing live video streams, recorded footage, and static images.
 
 ---
