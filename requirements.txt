@@ -1,0 +1,9 @@
+ultralytics
+opencv-python
+torch
+torchvision
+roboflow
+pandas
+flask
+streamlit
+easyocr

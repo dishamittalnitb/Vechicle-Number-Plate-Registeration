@@ -1,0 +1,30 @@
+﻿# Virtual environment
+venv310/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Large ML files / models
+*.pt
+*.pth
+*.onnx
+
+# Output files
+crops/
+latest_frame.jpg
+output_video.mp4
+
+# Dataset / temp folders
+License-Plate-Recognition-4/
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
