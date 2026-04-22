@@ -10,45 +10,46 @@ This project implements a complete end-to-end **ANPR pipeline** that:
 2. Detects license plates using a fine-tuned **YOLOv8s** model
 3. Tracks vehichles across frames using DeepSORT
 4. Extracts plate text using **EasyOCR** or **Claude Vision API**
-5. Applies **CCI (Check Character Index)** to correct common OCR errors
-6. Validates plate format against known regional patterns
-7. Outputs annotated video/image with detected plate numbers
+5. Validates plate format against known regional patterns
+6. Outputs annotated video/image with detected plate numbers
 
 Real-world use cases include highway surveillance, parking automation, toll systems, and traffic enforcement cameras.
 
 ---
 
 ## 🏗️ System Architecture
-
 ```
-┌─────────────────┐     ┌──────────────────────┐     ┌─────────────────────┐
-│  Input          │────▶│  YOLOv8s Detection   │────▶│  Plate Crop         │
-│  Video / Image  │     │  Fine-tuned on        │     │  + Preprocessing    │
-└─────────────────┘     │  License Plate Data   │     │  (3x upscale,       │
-                        └──────────────────────┘     │   OTSU threshold,   │
-                                                      │   denoising)        │
-                                                      └─────────┬───────────┘
+┌─────────────────┐     ┌──────────────────────┐     ┌──────────────────────┐
+│  Input          │────▶│  YOLOv8s Detection   │────▶│  DeepSORT Tracking   │
+│  Video / Image  │     │  Spatial Localization│     │  Vehicle ID & Track  │
+└─────────────────┘     └──────────────────────┘     └──────────┬───────────┘
+                                                                │
+                                              ┌─────────────────▼──────────────────┐
+                                              │  Plate Crop & Preprocessing        │
+                                              │  • Perspective Correction          │
+                                              │  • Denoising & Grayscale           │
+                                              │  • Blur Evaluation                 │
+                                              └─────────────────┬──────────────────┘
                                                                 │
                                               ┌─────────────────▼──────────────────┐
                                               │  OCR Engine                        │
-                                              │  Option A: EasyOCR (offline)       │
-                                              │  Option B: Claude Vision (API)     │
+                                              │  Option A: EasyOCR (Offline)       │
+                                              │  Option B: Claude Vision API       │
                                               └─────────────────┬──────────────────┘
                                                                 │
                                               ┌─────────────────▼──────────────────┐
                                               │  Post Processing                   │
-                                              │  • CCI Character Correction        │
                                               │  • Format Validation               │
-                                              │  • DeepSort Tracking Algorithm     │
+                                              │  • Majority Voting (30 frames)     │
                                               └─────────────────┬──────────────────┘
                                                                 │
                                               ┌─────────────────▼──────────────────┐
                                               │  Output                            │
-                                              │  Annotated Video / Image           │
-                                              │  + Plate Text                      │
+                                              │  Streamlit Web Dashboard           │
+                                              │  Annotated Video/Image & Logs      │
                                               └────────────────────────────────────┘
-```
 
+```
 ---
 
 ## 📊 Model Performance
@@ -88,11 +89,15 @@ Training hardware: **NVIDIA GeForce RTX 3050 Laptop GPU (4GB VRAM)**
 
 ### 2. Image Preprocessing Pipeline
 ```
-Original Crop → 3x Upscale → Grayscale → Contrast Enhancement
-             → OTSU Thresholding → Denoising → OCR Input
+Before text extraction, the cropped license plate image undergoes several transformations to maximize OCR accuracy:
+* **Perspective Correction: Warps the angled plate into a flat, rectangular shape using geometric transformations.
+* **Grayscale Conversion:** Simplifies the image from RGB to a single-channel grayscale matrix.
+* **Contrast Enhancement:** Scales the alpha (1.5) and beta (30) values to make characters pop against the plate background.
+* **Denoising:** Applies Fast Non-Local Means Denoising (`h=10`) to remove high-frequency visual artifacts.
+* **Blur Detection:** Calculates the Laplacian variance to evaluate image sharpness. Images with a blur score below the threshold (120) are skipped.
 ```
 
-### 3. CCI (Check Character Index)
+### 3. CCI (Check Character Index) (optional/avoided due to additional latency)
 Corrects common OCR confusion based on expected character type at each position:
 
 | OCR Reads | Corrected To | Rule Applied |
@@ -271,6 +276,7 @@ streamlit         # Fast Prototyping
 - [ ] Add database logging of detected plates with timestamps
 - [ ] Support for two-line plate formats
 - [ ] Speed estimation from video frame differencing
+- [ ] Implement **CCI (Check Character Index)** for post-OCR text correction (currently disabled to minimize processing latency)
 
 ---
 
