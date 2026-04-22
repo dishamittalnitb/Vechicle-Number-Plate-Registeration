@@ -88,14 +88,13 @@ Training hardware: **NVIDIA GeForce RTX 3050 Laptop GPU (4GB VRAM)**
 - Batch size: 8 (optimized for 4GB VRAM)
 
 ### 2. Image Preprocessing Pipeline
-```
 Before text extraction, the cropped license plate image undergoes several transformations to maximize OCR accuracy:
-* **Perspective Correction: Warps the angled plate into a flat, rectangular shape using geometric transformations.
-* **Grayscale Conversion:** Simplifies the image from RGB to a single-channel grayscale matrix.
-* **Contrast Enhancement:** Scales the alpha (1.5) and beta (30) values to make characters pop against the plate background.
-* **Denoising:** Applies Fast Non-Local Means Denoising (`h=10`) to remove high-frequency visual artifacts.
-* **Blur Detection:** Calculates the Laplacian variance to evaluate image sharpness. Images with a blur score below the threshold (120) are skipped.
-```
+- Perspective Correction: Warps the angled plate into a flat, rectangular shape using geometric transformations.
+- Grayscale Conversion: Simplifies the image from RGB to a single-channel grayscale matrix.
+- Contrast Enhancement: Scales the alpha (1.5) and beta (30) values to make characters pop against the plate background.
+- Denoising: Applies Fast Non-Local Means Denoising (`h=10`) to remove high-frequency visual artifacts.
+- Blur Detection: Calculates the Laplacian variance to evaluate image sharpness. Images with a blur score below the threshold (120) are skipped.
+
 
 ### 3. CCI (Check Character Index) (optional/avoided due to additional latency)
 Corrects common OCR confusion based on expected character type at each position:
